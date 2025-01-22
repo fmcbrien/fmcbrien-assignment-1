@@ -1,8 +1,5 @@
 import math
 
-geo_locations_1 = [[40.712776, -74.005974], [34.052235, -118.243683], [41.878113, -87.629799]]
-geo_locations_2 = [[37.774929, -122.419418], [25.761681, -80.191788], [47.606209, -122.332069]]
-
 def dist_eqn(lat_1, lat_2, lon_1, lon_2):
     # TODO haversine distance formula
     # variables    
