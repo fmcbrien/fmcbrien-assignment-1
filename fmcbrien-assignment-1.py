@@ -44,10 +44,10 @@ def close_dist_finder(first_geo_array, second_geo_array):
                 min_dist = dist
                 shortest_dist = location_2
 
-        print("The closest location to ", location_1, "is ", min_dist/1000, "kms away at point", shortest_dist)
+        print("The closest location to ", location_1, "is", min_dist/1000, "kms away at point", shortest_dist)
         closest_dist_array.append(shortest_dist)
 
-    print("The array of distances closest to the respective index location in the first array is ", closest_dist_array)
+    print("The array of distances closest to the respective index location in the first array is", closest_dist_array)
 
     return closest_dist_array
 
