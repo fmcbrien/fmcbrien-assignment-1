@@ -8,6 +8,10 @@ EC530
 Assuming location arrays are formatted such that each row has two col inputs, lat and lon respectively
 
 Ex.: geo_locations_1 = [[lat1, lon1], [lat2, lon2], ...]
+
+This program uses the Haversine Distance Formula to find the closest GPS location in the second array of
+locations to the GPS locations in the first array. The distance formula was taken from the following
+website: https://www.movable-type.co.uk/scripts/latlong.html
 '''
 
 def dist_eqn(lat_1, lat_2, lon_1, lon_2):
