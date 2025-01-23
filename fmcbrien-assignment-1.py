@@ -51,6 +51,16 @@ def close_dist_finder(first_geo_array, second_geo_array):
 
     return closest_dist_array
 
-# # Example implementation of the code where geo_locations_x is an array of GPS locations
-# closest_array = close_dist_finder(geo_locations_1, geo_locations_2)
-# print(closest_array)
+
+def main():
+    locations_1 = input("Please enter your first array with format 'latitude,longitude latitude,longitude ...,...': ").split()
+    geo_locations_1 = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations_1)]
+    
+    locations_2 = input("Please enter your second array with format 'latitude,longitude latitude,longitude ...,...': ").split()
+    geo_locations_2 = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations_2)]
+    
+    closest_array = close_dist_finder(geo_locations_1, geo_locations_2)
+    print(closest_array)
+
+if __name__ == "__main__":
+    main()
