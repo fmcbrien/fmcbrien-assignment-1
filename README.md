@@ -3,12 +3,13 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">Assignment 1</a>
+      <a href="#assignment-1">Assignment 1</a>
       <ul>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#running-the-code">Running the Code</a></li>
   </ol>
 </details>
 
@@ -50,3 +51,18 @@
     - [x] return array with closest locations
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- RUNNING THE CODE -->
+## Running the Code
+
+### Requirements
+* Python 3
+
+### Implementation
+* Clone the repository
+* cd into the correct folder
+* run script fmcbrien-assignment-1.py
+* Enter the GPS coordinates longitude and latitude separated by commas (",") and separate GPS values by spaces for the first and second arrays
+  * Ex: "latitude1,longitude1 latitude2,longitude2"
+* Observe results
