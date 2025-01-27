@@ -1,4 +1,5 @@
 import math
+import pandas as pd
 
 '''
 Name: Fallon McBrien
@@ -37,6 +38,7 @@ def close_dist_finder(first_geo_array, second_geo_array):
     for location_1 in first_geo_array:
         # set initial minimum distance to infinity so there will always be a min dist as long as there is a location in array 1 and 2
         min_dist = float('inf')
+        shortest_dist = None
         for location_2 in second_geo_array:
             dist = dist_eqn(location_1[0], location_2[0], location_1[1], location_2[1])
             # determines if the distance of the current point in array 2 is closer than the previous closest distance calculated
@@ -48,17 +50,59 @@ def close_dist_finder(first_geo_array, second_geo_array):
         closest_dist_array.append(shortest_dist)
 
     print("The array of distances closest to the respective index location in the first array is", closest_dist_array)
-
     return closest_dist_array
 
+def read_csv_locations(file_name, col_names):
+    df = pd.read_csv(file_name)
+
+    for col in col_names:
+        if col.strip() not in df.columns:
+            raise ValueError(f"Column '{col}' does not exist in the CSV file.")
+    return [(float(row[col_names[0].strip()]), float(row[col_names[1].strip()])) for _, row in df.iterrows()]
+
+def get_input_type(prompt):
+    while True:
+        file_type = input(prompt).strip().lower()
+        if file_type in ["manual", "csv"]:
+            return file_type
+        else:
+            print("Invalid file type input. Please enter 'manual' or 'csv'.")
+
+def get_manual_locations(prompt):
+    while True:
+        try:
+            locations = input(prompt).split()
+            geo_locations = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations)]
+            return geo_locations
+        except:
+            print("Invalid format. Please ensure you enter locations as 'latitude,longitude lat,lon'.")
+
+def get_csv_locations(prompt):
+    while True:
+        file_name = input(prompt)
+        column_names = input("Enter the column names (e.g., 'latitude,longitude'): ").split(",")
+        try:
+            return read_csv_locations(file_name, column_names)
+        except (FileNotFoundError, ValueError):
+            print("Error reading the file or invalid format. Please try again.")
 
 def main():
-    locations_1 = input("Please enter your first array with format 'latitude,longitude latitude,longitude ...,...': ").split()
-    geo_locations_1 = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations_1)]
+    print("For the first location array:")
+    file_type_1 = get_input_type("Please enter the file type (manual, csv): ")
     
-    locations_2 = input("Please enter your second array with format 'latitude,longitude latitude,longitude ...,...': ").split()
-    geo_locations_2 = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations_2)]
-    
+    if file_type_1 == "manual":
+        geo_locations_1 = get_manual_locations("Enter your first array (latitude,longitude latitude,longitude ...): ")
+    else:  # file_type_1 == "csv"
+        geo_locations_1 = get_csv_locations("Enter the name of your CSV file: ")
+
+    print("\nFor the second location array:")
+    file_type_2 = get_input_type("Please enter the file type (manual, csv): ")
+
+    if file_type_2 == "manual":
+        geo_locations_2 = get_manual_locations("Enter your second array (latitude,longitude latitude,longitude ...): ")
+    else:  # file_type_2 == "csv"
+        geo_locations_2 = get_csv_locations("Enter the name of your CSV file: ")
+
     closest_array = close_dist_finder(geo_locations_1, geo_locations_2)
     print(closest_array)
 
