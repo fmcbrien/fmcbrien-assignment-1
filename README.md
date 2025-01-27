@@ -49,6 +49,8 @@
 - [x] Iterate through GPS locations with formula
     - [x] nested for loop
     - [x] return array with closest locations
+- [ ] Implement comments on Issues
+- [ ] Try Actions
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
