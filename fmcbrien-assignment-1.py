@@ -1,5 +1,6 @@
 import math
 import pandas as pd
+import re
 
 '''
 Name: Fallon McBrien
@@ -35,6 +36,9 @@ def dist_eqn(lat_1, lat_2, lon_1, lon_2):
 def close_dist_finder(first_geo_array, second_geo_array):
     # nested for loop to compare each value in the first GPS location array to each value in the second
     closest_dist_array = []
+    overall_min_dist = float('inf')
+    overall_shortest_pair = None
+
     for location_1 in first_geo_array:
         # set initial minimum distance to infinity so there will always be a min dist as long as there is a location in array 1 and 2
         min_dist = float('inf')
@@ -46,18 +50,33 @@ def close_dist_finder(first_geo_array, second_geo_array):
                 min_dist = dist
                 shortest_dist = location_2
 
+            if dist < overall_min_dist:
+                overall_min_dist = dist
+                overall_shortest_pair = (location_1, location_2)
+
         print("The closest location to ", location_1, "is", min_dist/1000, "kms away at point", shortest_dist)
         closest_dist_array.append(shortest_dist)
 
     print("The array of distances closest to the respective index location in the first array is", closest_dist_array)
+
+    # Show the overall shortest distance
+    overall_distance_km = overall_min_dist / 1000
+    print(f"\nOverall shortest distance is {overall_distance_km:.2f} kms between {overall_shortest_pair[0]} and {overall_shortest_pair[1]}.")
+
     return closest_dist_array
 
 def read_csv_locations(file_name, col_names):
-    df = pd.read_csv(file_name)
-
+    try:
+        # Read CSV using pandas from either local file or URL
+        df = pd.read_csv(file_name)
+    except Exception as e:
+        raise ValueError(f"Error reading the CSV file: {e}")
+    
+    # Check if required columns exist
     for col in col_names:
         if col.strip() not in df.columns:
             raise ValueError(f"Column '{col}' does not exist in the CSV file.")
+    
     return [(float(row[col_names[0].strip()]), float(row[col_names[1].strip()])) for _, row in df.iterrows()]
 
 def get_input_type(prompt):
@@ -68,14 +87,27 @@ def get_input_type(prompt):
         else:
             print("Invalid file type input. Please enter 'manual' or 'csv'.")
 
+def is_lat_lon(lat, lon):
+    lat_range = re.compile(r"^-?(90(\.0+)?|[0-8]?\d(\.\d+)?)$")
+    lon_range = re.compile(r"^-?(180(\.0+)?|1[0-7]\d(\.\d+)?|[0-9]?\d(\.\d+)?)$")
+    return lat_range.match(lat) and lon_range.match(lon)
+
 def get_manual_locations(prompt):
     while True:
         try:
             locations = input(prompt).split()
-            geo_locations = [(float(lat), float(lon)) for lat, lon in (location.split(",") for location in locations)]
-            return geo_locations
-        except:
-            print("Invalid format. Please ensure you enter locations as 'latitude,longitude lat,lon'.")
+            geo_locations = []
+            for location in locations:
+                lat, lon = location.split(",")
+                if is_lat_lon(lat.strip(), lon.strip()):
+                    geo_locations.append((float(lat.strip()), float(lon.strip())))
+                else:
+                    print(f"Invalid input for location: {location}. Please enter in 'latitude,longitude' format.")
+                    break
+            else:
+                return geo_locations  # Return if all locations are valid
+        except ValueError:
+            print("Invalid format. Please ensure you enter locations as 'latitude,longitude' (e.g., '34.0,-58.0' or '-34.0,-58.0').")
 
 def get_csv_locations(prompt):
     while True:
