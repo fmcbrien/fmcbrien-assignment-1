@@ -65,6 +65,10 @@ def close_dist_finder(first_geo_array, second_geo_array):
 
     return closest_dist_array
 
+def preprocess_csv_data(data):
+    # Remove any characters that are not valid decimal points or digits
+    return re.sub(r"[^\d\.\-]", "", data)
+
 def read_csv_locations(file_name, col_names):
     try:
         # Read CSV using pandas from either local file or URL
@@ -77,7 +81,14 @@ def read_csv_locations(file_name, col_names):
         if col.strip() not in df.columns:
             raise ValueError(f"Column '{col}' does not exist in the CSV file.")
     
-    return [(float(row[col_names[0].strip()]), float(row[col_names[1].strip()])) for _, row in df.iterrows()]
+    geolocations = []
+    for _, row in df.iterrows():
+        # Preprocess latitude and longitude
+        lat = preprocess_csv_data(str(row[col_names[0].strip()]))
+        lon = preprocess_csv_data(str(row[col_names[1].strip()]))
+        geolocations.append((float(lat), float(lon)))
+        
+    return geolocations
 
 def get_input_type(prompt):
     while True:
