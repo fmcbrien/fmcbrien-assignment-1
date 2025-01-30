@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import tracemalloc
 import cProfile
+import logging
 
 '''
 Name: Fallon McBrien
@@ -20,6 +21,10 @@ website: https://www.movable-type.co.uk/scripts/latlong.html
 
 tracemalloc.start()
 cProfile.run('re.compile("foo|bar")')
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
+logger.debug('Logger Message')
 
 def dist_eqn(lat_1, lat_2, lon_1, lon_2):
     # using Haversine distance formula for distance between two GPS points
