@@ -1,6 +1,8 @@
 import math
 import pandas as pd
 import re
+import tracemalloc
+import cProfile
 
 '''
 Name: Fallon McBrien
@@ -15,6 +17,9 @@ This program uses the Haversine Distance Formula to find the closest GPS locatio
 locations to the GPS locations in the first array. The distance formula was taken from the following
 website: https://www.movable-type.co.uk/scripts/latlong.html
 '''
+
+tracemalloc.start()
+cProfile.run('re.compile("foo|bar")')
 
 def dist_eqn(lat_1, lat_2, lon_1, lon_2):
     # using Haversine distance formula for distance between two GPS points
@@ -148,6 +153,13 @@ def main():
 
     closest_array = close_dist_finder(geo_locations_1, geo_locations_2)
     print(closest_array)
+
+    snapshot = tracemalloc.take_snapshot()
+    top_stats = snapshot.statistics('lineno')
+
+    print("[ Top 10 ]")
+    for stat in top_stats:
+        print(stat)
 
 if __name__ == "__main__":
     main()
